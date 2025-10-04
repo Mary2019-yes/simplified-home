@@ -1,35 +1,105 @@
-<!doctype html>
-</section>
+<header>
+    <div class="brand">
+      <div class="logo">SH</div>
+      <div>
+        <strong>Simplifyd Home</strong><div style="font-size:12px;color:var(--muted)">Kitchen & Electronics</div>
+      </div>
+    </div>
 
+    <div class="search">
+      <input id="search" placeholder="Search products, e.g. blender, air fryer..." />
+      <button id="searchBtn">Search</button>
+    </div>
 
-<div class="footer">
-<div>
-<strong>About Simplifyd Home</strong>
-<p class="muted">We simplify everyday living by offering quality products at fair prices. Based in Kenya.</p>
-</div>
-<div>
-<strong>Contact</strong>
-<p class="muted">WhatsApp: +2547XXXXXXXX | Email: hello@simplifyd.co.ke</p>
-</div>
-</div>
-</main>
+    <div class="actions">
+      <button id="whatsappBtn">WhatsApp</button>
+      <div class="cart-btn">
+        <button id="openCart">Cart</button>
+        <div id="cartCount" class="cart-count" style="display:none">0</div>
+      </div>
+    </div>
+  </header>
 
+  <main>
+    <section class="hero">
+      <div class="intro">
+        <h1>Quality kitchenware & home electronics — affordable prices</h1>
+        <p>Fast delivery across Kenya. M-Pesa & PayPal supported. Browse by category or search for what you need.</p>
+        <div class="cta">
+          <button id="shopNow">Shop Now</button>
+          <button onclick="document.getElementById('newsletter').scrollIntoView({behavior:'smooth'})">Join Newsletter</button>
+        </div>
+      </div>
+      <div style="background:var(--card);padding:12px;border-radius:12px">
+        <h3 style="margin-top:0">Special Offer</h3>
+        <p class="muted">Bundle discounts on blenders and juicers. Free pickup near you.</p>
+        <img src="https://images.unsplash.com/photo-1601044304317-3d3b2f8d6b4e?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder" alt="offer" style="width:100%;border-radius:8px;margin-top:8px;object-fit:cover;height:160px"/>
+      </div>
+    </section>
 
-<div id="cartDrawer" class="drawer">
-<h4>Your Cart</h4>
-<div id="cartList"></div>
-<div id="cartEmpty" class="muted">Your cart is empty</div>
-<div class="checkout">
-<button id="checkoutBtn">Checkout</button>
-<button id="closeCart">Close</button>
-</div>
-</div>
+    <section class="filters">
+      <div class="chips" id="categoryChips">
+        <button data-cat="all">All</button>
+        <button data-cat="kitchen">Kitchen Appliances</button>
+        <button data-cat="cookware">Cookware</button>
+        <button data-cat="electronics">Electronics</button>
+        <button data-cat="accessories">Accessories</button>
+      </div>
+      <div style="margin-left:auto;display:flex;gap:8px">
+        <select id="sort">
+          <option value="default">Sort: Featured</option>
+          <option value="price-asc">Price: Low → High</option>
+          <option value="price-desc">Price: High → Low</option>
+        </select>
+        <select id="currency">
+          <option value="KES">KES</option>
+        </select>
+      </div>
+    </section>
 
+    <section class="grid" id="productGrid">
+      <!-- product cards rendered here -->
+    </section>
 
-<script src="app.js"></script>
-</body>
-</html>
-```
+    <div class="footer">
+      <div>
+        <strong>About Simplifyd Home</strong>
+        <p class="muted">We simplify everyday living by offering quality products at fair prices. Based in Kenya.</p>
+      </div>
+      <div>
+        <strong>Contact</strong>
+        <p class="muted">WhatsApp: +2547XXXXXXXX | Email: hello@simplifyd.co.ke</p>
+      </div>
+    </div>
 
+    <section id="newsletter" style="margin-top:14px">
+      <div style="background:#fff;padding:14px;border-radius:10px;margin-top:12px">
+        <h3 style="margin:0 0 6px">Join our newsletter</h3>
+        <p class="muted" style="margin:0 0 8px">Get discounts & new arrivals in your inbox.</p>
+        <div style="display:flex;gap:8px">
+          <input id="emailInput" placeholder="Your email" style="flex:1;padding:8px;border-radius:8px;border:1px solid #ddd" />
+          <button id="subscribe">Subscribe</button>
+        </div>
+      </div>
+    </section>
+  </main>
 
----
+  <!-- Cart drawer (hidden by default) -->
+  <div id="cartDrawer" class="drawer" style="display:none">
+    <h4>Your Cart</h4>
+    <div id="cartList"></div>
+    <div id="cartEmpty" class="muted">Your cart is empty</div>
+    <div class="checkout">
+      <button id="checkoutBtn">Checkout</button>
+      <button id="closeCart" style="background:#ddd;color:#000">Close</button>
+    </div>
+  </div>
+
+  
+
+  <!-- Notes:
+    - This is a single-file demo. Replace product images and data with real backend data.
+    - To integrate M-Pesa (STK Push), implement server-side Daraja API calls (server must keep API keys private).
+    - To accept PayPal, add PayPal JS SDK and server endpoints for order capture.
+    - I can split this into separate files (index.html, style.css, app.js) or convert to React if you want.
+  -->
