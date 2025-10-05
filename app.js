@@ -139,14 +139,39 @@
       document.getElementById('emailInput').value='';
     });
 
-    // WhatsApp button example
-    document.getElementById('whatsappBtn').addEventListener('click',()=>{
-      const wa = 'https://wa.me/254700000000?text=' + encodeURIComponent('Hi Simplifyd Home! I need help with an order.');
-      window.open(wa,'_blank');
-    });
+// WhatsApp button with your number
+document.getElementById('whatsappBtn').addEventListener('click',()=>{
+  const wa = 'https://wa.me/254743039253?text=' + encodeURIComponent('Hi Mary 👋, I need help with an order or want to buy a product.');
+  window.open(wa,'_blank');
+});
 
-    // Shop Now scroll
-    document.getElementById('shopNow').addEventListener('click',()=>{ document.getElementById('productGrid').scrollIntoView({behavior:'smooth'}); });
+
+  // Checkout flow with WhatsApp message
+document.getElementById('checkoutBtn').addEventListener('click',()=>{
+  const ids = Object.keys(CART); 
+  if(ids.length===0) return alert('Cart is empty');
+
+  const name = prompt('Full name'); if(!name) return;
+  const phone = prompt('Phone (e.g. 07...)'); if(!phone) return;
+  const address = prompt('Delivery address'); if(!address) return;
+
+  // Collect cart summary
+  let orderDetails = '🛒 *Simplified Home Order*\n\n';
+  ids.forEach(id=>{
+    const p = PRODUCTS.find(x=>x.id==id);
+    const qty = CART[id];
+    orderDetails += `- ${p.title} x${qty} = KES ${p.price*qty}\n`;
+  });
+
+  orderDetails += `\n👤 Name: ${name}\n📞 Phone: ${phone}\n🏠 Address: ${address}\n\nThank you!`;
+
+  // Open WhatsApp with order
+  const wa = 'https://wa.me/254743039253?text=' + encodeURIComponent(orderDetails);
+  window.open(wa,'_blank');
+
+  // clear cart
+  CART = {}; saveCart(); renderCart(); document.getElementById('cartDrawer').style.display='none';
+});
 
     // initialize
     updateCartCount(); renderCart();
