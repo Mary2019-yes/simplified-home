@@ -27,7 +27,8 @@
           <div class="muted">${p.desc}</div>
           <div style="margin-top:auto;display:flex;justify-content:space-between;align-items:center;margin-top:10px">
             <div class="price">${formatKES(p.price)}</div>
-            <div><button onclick="addToCart(${p.id})">Add to Cart</button></div>
+            <div><button onclick="orderNow(${p.id})">Order Now</button></div>
+
           </div>
         `;
         grid.appendChild(div);
@@ -62,6 +63,12 @@
       CART[id] = (CART[id]||0)+1; saveCart(); renderCart();
       alert('Added to cart');
     }
+function orderNow(id){
+  addToCart(id);
+  document.getElementById('cartDrawer').style.display='block';
+  renderCart();
+}
+
     function removeFromCart(id){ delete CART[id]; saveCart(); renderCart(); }
     function changeQty(id,delta){ CART[id] = Math.max(0,(CART[id]||0)+delta); if(CART[id]===0) delete CART[id]; saveCart(); renderCart(); }
 
