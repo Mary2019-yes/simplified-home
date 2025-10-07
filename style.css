@@ -149,6 +149,21 @@
   max-height: 400px;
   object-fit: cover;
 }
+#cartDrawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 400px; /* 👈 increase this number (default is often 300px) */
+  height: 100vh;
+  background: #fff;
+  border-left: 2px solid #ccc;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  overflow-y: auto;
+  z-index: 9999;
+  transition: all 0.3s ease;
+}
+
 
     *{box-sizing:border-box}
     body{font-family:Inter,system-ui,Arial,sans-serif;margin:0;background:var(--bg);color:#111}
