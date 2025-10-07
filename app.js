@@ -135,21 +135,45 @@ function updateCart() {
 }
 
 
-  // ✅ Checkout (send WhatsApp message)
-  checkoutBtn.addEventListener("click", () => {
-    if (cart.length === 0) {
-      alert("Your cart is empty!");
-      return;
-    }
-    const message = cart.map(i => `${i.name} - ${i.price} x ${i.qty}`).join("\n");
-    const total = cart.reduce((sum, item) => {
-      const num = parseInt(item.price.replace(/\D/g, ""));
-      return sum + num * item.qty;
-    }, 0);
-    const fullMsg = `Hello! I'd like to order:\n${message}\n\nTotal: KES ${total}`;
-    const phone = "254743039253"; // your WhatsApp number
-    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(fullMsg)}`, "_blank");
+// ✅ Open checkout form instead of sending WhatsApp directly
+checkoutBtn.addEventListener("click", () => {
+  if (cart.length === 0) {
+    alert("Your cart is empty!");
+    return;
+  }
+
+  // Fill order summary
+  const orderSummary = document.getElementById("orderSummary");
+  let summaryHTML = "<table style='width:100%;'><tr><th>Product</th><th>Subtotal</th></tr>";
+  let total = 0;
+
+  cart.forEach(item => {
+    const priceNum = parseInt(item.price.replace(/\D/g, ""));
+    const itemTotal = priceNum * item.qty;
+    total += itemTotal;
+    summaryHTML += `<tr><td>${item.name} × ${item.qty}</td><td>KES ${itemTotal}</td></tr>`;
   });
+
+  summaryHTML += `<tr><td><strong>Total</strong></td><td><strong>KES ${total}</strong></td></tr></table>`;
+  orderSummary.innerHTML = summaryHTML;
+
+  // Show modal
+  document.getElementById("checkoutModal").style.display = "flex";
+});
+
+// ✅ Close checkout modal
+document.querySelector(".close-checkout").addEventListener("click", () => {
+  document.getElementById("checkoutModal").style.display = "none";
+});
+
+// ✅ Handle order form submit
+document.getElementById("checkoutForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  alert("✅ Thank you! Your order has been received. We will contact you shortly.");
+  document.getElementById("checkoutModal").style.display = "none";
+  cart = [];
+  updateCart();
+});
 
   // ✅ WhatsApp general chat
   whatsappBtn.addEventListener("click", () => {
