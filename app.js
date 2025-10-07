@@ -135,7 +135,9 @@ document.addEventListener("DOMContentLoaded", () => {
     cartDrawer.style.display = "block";
   });
 
-  closeCartBtn.addEventListener("click", () => {
+    closeCartBtn.addEventListener("click", () => {
     cartDrawer.style.display = "none";
   });
 }); // ✅ properly closes DOMContentLoaded
+
+
