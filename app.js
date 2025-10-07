@@ -82,28 +82,58 @@ document.addEventListener("DOMContentLoaded", () => {
     updateCart();
   }
 
-  // ✅ Update cart display
-  function updateCart() {
-    cartList.innerHTML = "";
-    if (cart.length === 0) {
-      cartEmpty.style.display = "block";
-      cartCount.style.display = "none";
-    } else {
-      cartEmpty.style.display = "none";
-      cartCount.style.display = "inline-block";
-      cartCount.textContent = cart.reduce((a, b) => a + b.qty, 0);
-      cart.forEach(item => {
-        const div = document.createElement("div");
-        div.className = "cart-item";
-        div.innerHTML = `
-          <strong>${item.name}</strong><br>
-          ${item.price} x ${item.qty}
-          <hr>
-        `;
-        cartList.appendChild(div);
+// ✅ Update cart display
+function updateCart() {
+  cartList.innerHTML = "";
+  
+  if (cart.length === 0) {
+    cartEmpty.style.display = "block";
+    cartCount.style.display = "none";
+  } else {
+    cartEmpty.style.display = "none";
+    cartCount.style.display = "inline-block";
+    cartCount.textContent = cart.reduce((a, b) => a + b.qty, 0);
+
+    let total = 0;
+
+    cart.forEach((item, index) => {
+      const priceNum = parseInt(item.price.replace(/\D/g, ""));
+      const itemTotal = priceNum * item.qty;
+      total += itemTotal;
+
+      const div = document.createElement("div");
+      div.className = "cart-item";
+      div.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <strong>${item.name}</strong><br>
+            ${item.price} × ${item.qty} = <strong>KES ${itemTotal}</strong>
+          </div>
+          <button class="delete-btn" data-index="${index}" style="background:#ff4d4d;color:#fff;border:none;padding:4px 8px;border-radius:5px;cursor:pointer;">Remove</button>
+        </div>
+        <hr>
+      `;
+      cartList.appendChild(div);
+    });
+
+    // ✅ Add total at the bottom
+    const totalDiv = document.createElement("div");
+    totalDiv.innerHTML = `<h3>Total: KES ${total}</h3>`;
+    totalDiv.style.textAlign = "right";
+    totalDiv.style.marginTop = "10px";
+    cartList.appendChild(totalDiv);
+
+    // ✅ Handle delete buttons
+    document.querySelectorAll(".delete-btn").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        const index = e.target.dataset.index;
+        cart.splice(index, 1);
+        updateCart(); // refresh cart after deleting
       });
-    }
+    });
   }
+}
+
 
   // ✅ Checkout (send WhatsApp message)
   checkoutBtn.addEventListener("click", () => {
