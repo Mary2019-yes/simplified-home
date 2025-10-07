@@ -166,14 +166,32 @@ document.querySelector(".close-checkout").addEventListener("click", () => {
   document.getElementById("checkoutModal").style.display = "none";
 });
 
-// ✅ Handle order form submit
+// ✅ Handle order form submit — Send order to WhatsApp
 document.getElementById("checkoutForm").addEventListener("submit", (e) => {
   e.preventDefault();
-  alert("✅ Thank you! Your order has been received. We will contact you shortly.");
+
+  const formData = new FormData(e.target);
+  const name = formData.get("name");
+  const phone = formData.get("phone");
+  const address = formData.get("address");
+
+  // Create order summary
+  const message = cart.map(i => `${i.name} - ${i.price} x ${i.qty}`).join("\n");
+  const total = cart.reduce((sum, item) => {
+    const num = parseInt(item.price.replace(/\D/g, ""));
+    return sum + num * item.qty;
+  }, 0);
+
+  const fullMsg = `🛒 *New Order Received!*\n\n👤 Name: ${name}\n📞 Phone: ${phone}\n📍 Address: ${address}\n\n${message}\n\n💰 *Total:* KES ${total}`;
+
+  const yourNumber = "254743039253"; // your WhatsApp number
+  window.open(`https://wa.me/${yourNumber}?text=${encodeURIComponent(fullMsg)}`, "_blank");
+
   document.getElementById("checkoutModal").style.display = "none";
   cart = [];
   updateCart();
 });
+
 
   // ✅ WhatsApp general chat
   whatsappBtn.addEventListener("click", () => {
