@@ -31,7 +31,32 @@ document.querySelectorAll(".order-btn").forEach(btn => {
     const name = card.querySelector("h3").textContent;
     const desc = card.querySelector("p").textContent;
     const price = card.querySelector(".price").textContent;
+ 
+    // 👇 Add this special section here
+    if (name === "Kitchen Weighing Scale") {
+      productDescription.innerHTML = `
+        <ul>
+          <li>Digital scale with LCD display for accurate measurements</li>
+          <li>High-precision sensor ensures consistent results</li>
+          <li>Compact and durable design for daily use</li>
+          <li>Easy-to-read LCD screen for quick viewing</li>
+          <li>Suitable for both home and business applications</li>
+        </ul>
+      `;
+    } else {
+      productDescription.textContent = desc;
+    }
 
+    // ✅ Fill modal
+    productName.textContent = name;
+    productImage.src = img;
+    productPrice.textContent = price;
+    productQuantity.value = 1;
+
+    currentProduct = { name, img, desc, price };
+    modal.style.display = "flex";
+  });
+});
     // Fill modal
     productName.textContent = name;
     productImage.src = img;
