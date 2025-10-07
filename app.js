@@ -1,5 +1,6 @@
 // app.js — handles product details, cart, and WhatsApp orders
 
+document.addEventListener("DOMContentLoaded", () => {
 const modal = document.getElementById("productDetailModal");
 const closeBtn = document.querySelector(".close-btn");
 const productName = document.getElementById("productName");
