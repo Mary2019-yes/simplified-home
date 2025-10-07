@@ -1,159 +1,121 @@
-document.addEventListener('DOMContentLoaded', () => {
-  // ---------------- Products Data ----------------
-  const products = [
-    {
-      id: "blender",
-      name: "Electric Blender",
-      image: "https://images.unsplash.com/photo-1586201375761-83865001e31b?w=400",
-      description: "Powerful 2L blender perfect for juices, smoothies, and kitchen prep.",
-      price: 4200
-    },
-    {
-      id: "kettle",
-      name: "Electric Kettle",
-      image: "https://images.unsplash.com/photo-1616627988854-6e2b6a32db23?w=400",
-      description: "1.7L stainless steel kettle for fast boiling and elegant design.",
-      price: 2800
-    },
-    {
-      id: "airFryer",
-      name: "Digital Air Fryer",
-      image: "https://images.unsplash.com/photo-1616628188461-9e06d43d0a38?w=400",
-      description: "Healthy cooking with less oil — 4L capacity and digital temperature control.",
-      price: 8500
-    }
-    // Add the rest of your products here...
-  ];
+// app.js — handles product details, cart, and WhatsApp orders
 
-  // ---------------- Cart ----------------
-  let cart = [];
-  const cartDrawer = document.getElementById('cartDrawer');
-  const cartList = document.getElementById('cartList');
-  const cartCount = document.getElementById('cartCount');
-  const cartEmpty = document.getElementById('cartEmpty');
+const modal = document.getElementById("productDetailModal");
+const closeBtn = document.querySelector(".close-btn");
+const productName = document.getElementById("productName");
+const productImage = document.getElementById("productImage");
+const productDescription = document.getElementById("productDescription");
+const productPrice = document.getElementById("productPrice");
+const productQuantity = document.getElementById("productQuantity");
+const addToBagBtn = document.getElementById("addToBag");
 
-  function updateCartUI() {
-    cartList.innerHTML = '';
-    if(cart.length === 0) {
-      cartEmpty.style.display = 'block';
-      cartCount.style.display = 'none';
-    } else {
-      cartEmpty.style.display = 'none';
-      cartCount.style.display = 'block';
-      cartCount.textContent = cart.reduce((acc, item) => acc + item.quantity, 0);
-      cart.forEach(item => {
-        const div = document.createElement('div');
-        div.className = 'cart-item';
-        div.innerHTML = `
-          <img src="${item.image}" alt="${item.name}">
-          <div>
-            <strong>${item.name}</strong>
-            <p>${item.quantity} x KES ${item.price}</p>
-          </div>
-        `;
-        cartList.appendChild(div);
-      });
-    }
+// WhatsApp & Cart buttons
+const openCartBtn = document.getElementById("openCart");
+const closeCartBtn = document.getElementById("closeCart");
+const cartDrawer = document.getElementById("cartDrawer");
+const cartList = document.getElementById("cartList");
+const cartEmpty = document.getElementById("cartEmpty");
+const cartCount = document.getElementById("cartCount");
+const checkoutBtn = document.getElementById("checkoutBtn");
+const whatsappBtn = document.getElementById("whatsappBtn");
+
+let currentProduct = {};
+let cart = [];
+
+// ✅ Handle "Order Now" clicks
+document.querySelectorAll(".order-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const card = btn.closest(".product-card");
+    const img = card.querySelector("img").src;
+    const name = card.querySelector("h3").textContent;
+    const desc = card.querySelector("p").textContent;
+    const price = card.querySelector(".price").textContent;
+
+    // Fill modal
+    productName.textContent = name;
+    productImage.src = img;
+    productDescription.textContent = desc;
+    productPrice.textContent = price;
+    productQuantity.value = 1;
+
+    currentProduct = { name, img, desc, price };
+    modal.style.display = "flex";
+  });
+});
+
+// ✅ Close modal
+closeBtn.addEventListener("click", () => {
+  modal.style.display = "none";
+});
+
+// ✅ Add to cart
+addToBagBtn.addEventListener("click", () => {
+  const qty = parseInt(productQuantity.value);
+  addToCart(currentProduct.name, currentProduct.price, qty);
+  modal.style.display = "none";
+  cartDrawer.style.display = "block";
+});
+
+// ✅ Add to cart function
+function addToCart(name, price, qty = 1) {
+  const existing = cart.find(i => i.name === name);
+  if (existing) {
+    existing.qty += qty;
+  } else {
+    cart.push({ name, price, qty });
   }
+  updateCart();
+}
 
-  document.getElementById('openCart').addEventListener('click', () => cartDrawer.style.display='block');
-  document.getElementById('closeCart').addEventListener('click', () => cartDrawer.style.display='none');
-  document.getElementById('checkoutBtn').addEventListener('click', () => alert('Proceed to checkout'));
-
-  // ---------------- WhatsApp Button ----------------
-  document.getElementById('whatsappBtn').addEventListener('click', () => {
-    const url = "https://wa.me/254743039253?text=Hello%20Simplifyd%20Home";
-    window.open(url, '_blank');
-  });
-
-  // ---------------- Search ----------------
-  document.getElementById('searchBtn').addEventListener('click', () => {
-    const query = document.getElementById('search').value.toLowerCase();
-    const productGrid = document.getElementById('productGrid');
-    productGrid.innerHTML = '';
-    const filtered = products.filter(p => p.name.toLowerCase().includes(query));
-    if(filtered.length === 0){
-      productGrid.innerHTML = '<p>No products found.</p>';
-    } else {
-      filtered.forEach(p => {
-        const card = document.createElement('div');
-        card.className = 'product-card';
-        card.dataset.id = p.id;
-        card.innerHTML = `
-          <img src="${p.image}" alt="${p.name}">
-          <div class="details">
-            <h3>${p.name}</h3>
-            <p>${p.description}</p>
-            <p class="price">KES ${p.price}</p>
-            <button class="order-btn">Order Now</button>
-          </div>
-        `;
-        productGrid.appendChild(card);
-      });
-      attachOrderButtons(); // re-attach modal functionality after search
-    }
-  });
-
-  // ---------------- Modal ----------------
-  const modal = document.createElement('div');
-  modal.id = 'productDetailModal';
-  modal.className = 'modal';
-  modal.style.display = 'none';
-  modal.innerHTML = `
-    <div class="modal-content">
-      <span class="close-btn">&times;</span>
-      <h2 id="productName"></h2>
-      <img id="productImage" src="" alt="Product Image">
-      <p id="productDescription"></p>
-      <p id="productPrice"></p>
-      <p>Quantity: <input type="number" id="productQuantity" value="1" min="1"></p>
-      <button id="addToBag">Add to Bag</button>
-    </div>
-  `;
-  document.body.appendChild(modal);
-
-  const closeModal = modal.querySelector('.close-btn');
-  const addToBagBtn = modal.querySelector('#addToBag');
-  const productName = modal.querySelector('#productName');
-  const productImage = modal.querySelector('#productImage');
-  const productDescription = modal.querySelector('#productDescription');
-  const productPrice = modal.querySelector('#productPrice');
-  const productQuantity = modal.querySelector('#productQuantity');
-
-  closeModal.addEventListener('click', () => modal.style.display='none');
-
-  function attachOrderButtons() {
-    const orderBtns = document.querySelectorAll('.order-btn');
-    orderBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const productId = btn.closest('.product-card').dataset.id;
-        const product = products.find(p => p.id === productId);
-        if(product){
-          productName.textContent = product.name;
-          productImage.src = product.image;
-          productDescription.textContent = product.description;
-          productPrice.textContent = `KES ${product.price}`;
-          productQuantity.value = 1;
-          modal.style.display = 'flex';
-          
-          addToBagBtn.onclick = () => {
-            const quantity = parseInt(productQuantity.value);
-            const existing = cart.find(c => c.id === product.id);
-            if(existing) existing.quantity += quantity;
-            else cart.push({...product, quantity});
-            updateCartUI();
-            modal.style.display = 'none';
-          };
-        }
-      });
+// ✅ Update cart display
+function updateCart() {
+  cartList.innerHTML = "";
+  if (cart.length === 0) {
+    cartEmpty.style.display = "block";
+    cartCount.style.display = "none";
+  } else {
+    cartEmpty.style.display = "none";
+    cartCount.style.display = "inline-block";
+    cartCount.textContent = cart.reduce((a, b) => a + b.qty, 0);
+    cart.forEach(item => {
+      const div = document.createElement("div");
+      div.className = "cart-item";
+      div.innerHTML = `
+        <strong>${item.name}</strong><br>
+        ${item.price} x ${item.qty}
+        <hr>
+      `;
+      cartList.appendChild(div);
     });
   }
+}
 
-  attachOrderButtons(); // initial attach for all buttons
+// ✅ Checkout (send WhatsApp message)
+checkoutBtn.addEventListener("click", () => {
+  if (cart.length === 0) {
+    alert("Your cart is empty!");
+    return;
+  }
+  const message = cart.map(i => `${i.name} - ${i.price} x ${i.qty}`).join("\n");
+  const total = cart.reduce((sum, item) => {
+    const num = parseInt(item.price.replace(/\D/g, ""));
+    return sum + num * item.qty;
+  }, 0);
+  const fullMsg = `Hello! I'd like to order:\n${message}\n\nTotal: KES ${total}`;
+  const phone = "254743039253"; // your WhatsApp number
+  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(fullMsg)}`, "_blank");
+});
 
-  // ---------------- Newsletter ----------------
-  document.getElementById('subscribe').addEventListener('click', () => {
-    const email = document.getElementById('emailInput').value;
-    if(email) alert(`Subscribed with ${email}`);
-  });
+// ✅ WhatsApp general chat
+whatsappBtn.addEventListener("click", () => {
+  const phone = "254743039253";
+  window.open(`https://wa.me/${phone}?text=Hi! I'm interested in your kitchen and electronics products.`, "_blank");
+});
+
+// ✅ Open / close cart
+openCartBtn.addEventListener("click", () => {
+  cartDrawer.style.display = "block";
+});
+closeCartBtn.addEventListener("click", () => {
+  cartDrawer.style.display = "none";
 });
