@@ -31,7 +31,7 @@ document.querySelectorAll(".order-btn").forEach(btn => {
     const name = card.querySelector("h3").textContent;
     const desc = card.querySelector("p").textContent;
     const price = card.querySelector(".price").textContent;
- 
+
     // 👇 Add this special section here
     if (name === "Kitchen Weighing Scale") {
       productDescription.innerHTML = `
@@ -55,19 +55,8 @@ document.querySelectorAll(".order-btn").forEach(btn => {
 
     currentProduct = { name, img, desc, price };
     modal.style.display = "flex";
-  });
-});
-    // Fill modal
-    productName.textContent = name;
-    productImage.src = img;
-    productDescription.textContent = desc;
-    productPrice.textContent = price;
-    productQuantity.value = 1;
-
-    currentProduct = { name, img, desc, price };
-    modal.style.display = "flex";
-  });
-});
+  }); // closes event listener
+}); // closes forEach
 
 // ✅ Close modal
 closeBtn.addEventListener("click", () => {
