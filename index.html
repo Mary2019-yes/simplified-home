@@ -258,6 +258,56 @@
 
   </div>
 </div>
+<!-- ✅ Checkout Modal -->
+<div id="checkoutModal" class="checkout-modal">
+  <div class="checkout-content">
+    <span class="close-checkout">&times;</span>
+    <h2>Billing Details</h2>
+
+    <form id="checkoutForm">
+      <label>First name *</label>
+      <input type="text" id="firstName" required>
+
+      <label>Last name *</label>
+      <input type="text" id="lastName" required>
+
+      <label>Company name (optional)</label>
+      <input type="text" id="companyName">
+
+      <label>Country / Region *</label>
+      <input type="text" value="Kenya" readonly>
+
+      <label>Street address *</label>
+      <input type="text" id="address" placeholder="House number and street name" required>
+      <input type="text" placeholder="Apartment, suite, unit, etc. (optional)">
+
+      <label>Town / City *</label>
+      <input type="text" id="city" required>
+
+      <label>State / County *</label>
+      <input type="text" id="county" placeholder="e.g. Nairobi County" required>
+
+      <label>Postcode / ZIP *</label>
+      <input type="text" id="zip">
+
+      <label>Phone *</label>
+      <input type="tel" id="phone" required>
+
+      <label>Email address *</label>
+      <input type="email" id="email" required>
+
+      <label>Order notes (optional)</label>
+      <textarea id="notes" placeholder="Notes about your order, e.g. special instructions"></textarea>
+
+      <h3>Your Order</h3>
+      <div id="orderSummary"></div>
+
+      <p>Place your Order Here & we will get back to you shortly</p>
+      <button type="submit" id="placeOrderBtn">Place Order</button>
+      <small>Your personal data will be used to process your order and support your experience on this site.</small>
+    </form>
+  </div>
+</div>
 
 </body>
 </html>
