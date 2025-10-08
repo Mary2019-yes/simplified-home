@@ -133,38 +133,44 @@ function updateCart() {
     });
   }
 }
+// ✅ Checkout button & modal
+const checkoutBtn = document.getElementById("checkoutBtn");
+const checkoutModal = document.getElementById("checkoutModal");
+const closeCheckoutBtn = document.querySelector(".close-checkout");
+const orderSummary = document.getElementById("orderSummary");
 
+if (checkoutBtn && checkoutModal && orderSummary) {
+  checkoutBtn.addEventListener("click", () => {
+    if (cart.length === 0) {
+      alert("Your cart is empty!");
+      return;
+    }
 
-// ✅ Open checkout form instead of sending WhatsApp directly
-checkoutBtn.addEventListener("click", () => {
-  if (cart.length === 0) {
-    alert("Your cart is empty!");
-    return;
-  }
+    // Fill order summary
+    let summaryHTML = "<table style='width:100%;'><tr><th>Product</th><th>Subtotal</th></tr>";
+    let total = 0;
 
-  // Fill order summary
-  const orderSummary = document.getElementById("orderSummary");
-  let summaryHTML = "<table style='width:100%;'><tr><th>Product</th><th>Subtotal</th></tr>";
-  let total = 0;
+    cart.forEach(item => {
+      const priceNum = parseInt(item.price.replace(/\D/g, ""));
+      const itemTotal = priceNum * item.qty;
+      total += itemTotal;
+      summaryHTML += `<tr><td>${item.name} × ${item.qty}</td><td>KES ${itemTotal}</td></tr>`;
+    });
 
-  cart.forEach(item => {
-    const priceNum = parseInt(item.price.replace(/\D/g, ""));
-    const itemTotal = priceNum * item.qty;
-    total += itemTotal;
-    summaryHTML += `<tr><td>${item.name} × ${item.qty}</td><td>KES ${itemTotal}</td></tr>`;
+    summaryHTML += `<tr><td><strong>Total</strong></td><td><strong>KES ${total}</strong></td></tr></table>`;
+    orderSummary.innerHTML = summaryHTML;
+
+    // Show modal
+    checkoutModal.style.display = "flex";
   });
+}
 
-  summaryHTML += `<tr><td><strong>Total</strong></td><td><strong>KES ${total}</strong></td></tr></table>`;
-  orderSummary.innerHTML = summaryHTML;
-
-  // Show modal
-  document.getElementById("checkoutModal").style.display = "flex";
-});
-
-// ✅ Close checkout modal
-document.querySelector(".close-checkout").addEventListener("click", () => {
-  document.getElementById("checkoutModal").style.display = "none";
-});
+// ✅ Close modal
+if (closeCheckoutBtn && checkoutModal) {
+  closeCheckoutBtn.addEventListener("click", () => {
+    checkoutModal.style.display = "none";
+  });
+}
 
 // ✅ Handle order form submit — Send order to WhatsApp
 document.getElementById("checkoutForm").addEventListener("submit", (e) => {
