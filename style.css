@@ -232,6 +232,14 @@
   margin-top: 10px;
   border-radius: 5px;
 }
+.close-checkout {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 22px;
+  cursor: pointer;
+  color: #333;
+}
 
     *{box-sizing:border-box}
     body{font-family:Inter,system-ui,Arial,sans-serif;margin:0;background:var(--bg);color:#111}
