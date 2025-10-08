@@ -171,7 +171,9 @@ document.getElementById("checkoutForm").addEventListener("submit", (e) => {
   e.preventDefault();
 
   const formData = new FormData(e.target);
-  const name = formData.get("name");
+  const firstName = formData.get("firstName");
+  const lastName = formData.get("lastName");
+  const name = firstName + " " + lastName;
   const phone = formData.get("phone");
   const address = formData.get("address");
 
