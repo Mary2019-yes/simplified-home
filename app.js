@@ -171,7 +171,7 @@ if (closeCheckoutBtn && checkoutModal) {
     checkoutModal.style.display = "none";
   });
 }
-
+document.addEventListener("DOMContentLoaded", () => {
 // ✅ Handle order form submit — Send order to WhatsApp
 document.getElementById("checkoutForm").addEventListener("submit", (e) => {
   e.preventDefault();
